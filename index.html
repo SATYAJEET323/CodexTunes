@@ -1,220 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Music Player</title>
-    <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-    
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #141E30, #243B55);
-            color: #fff;
-        }
-    
-        /* Player Container */
-        .player {
-            width: 340px;
-            background: rgba(255, 255, 255, 0.15); /* Transparent white for glass effect */
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Light border for glass effect */
-        }
-    
-        /* Album Art */
-        #album-art {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
-        }
-    
-        /* Song Title */
-        #song-title {
-            font-size: 20px;
-            margin: 15px 0;
-            font-weight: bold;
-        }
-    
-        /* Controls */
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-        }
-    
-        .controls button {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            padding: 10px;
-            color: #fff;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 50%;
-            width: 45px;
-            height: 45px;
-            transition: all 0.3s ease;
-        }
-    
-        .controls button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-    
-        /* Progress Bar */
-        #progress-bar {
-            width: 100%;
-            margin: 20px 0;
-            appearance: none;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            outline: none;
-        }
-    
-        #progress-bar::-webkit-slider-thumb {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #00D4FF; /* Bright blue for contrast */
-            cursor: pointer;
-            box-shadow: 0px 0px 5px rgba(0, 212, 255, 0.5);
-        }
-    
-        #play-pause {
-            background: #00D4FF;
-            font-size: 24px;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-        }
-    </style>
-    
-</head>
-<body>
-    <div class="player">
-        <img id="album-art" src="https://via.placeholder.com/300x300" alt="Album Art">
-        <h2 id="song-title">Select a Song</h2>
-        <audio id="audio" src=""></audio>
-        <input type="range" id="progress-bar" min="0" max="100" value="0">
-        
-        <div class="controls">
-            <button id="prev">&#9664;</button>
-            <button id="play-pause">►</button>
-            <button id="next">&#9654;</button>
-        </div>
-    </div>
-
-    <script>
-        // JavaScript functionality for the music player
-        const audio = document.getElementById('audio');
-        const playPauseBtn = document.getElementById('play-pause');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        const progressBar = document.getElementById('progress-bar');
-        const songTitle = document.getElementById('song-title');
-        const albumArt = document.getElementById('album-art');
-    
-        // Songs array
-        const songs = [
-            {
-                title: 'Song One',
-                src: 'audio/song1.mp3',
-                albumArt: 'https://via.placeholder.com/300x300?text=Song+One'
-            },
-            {
-                title: 'Song Two',
-                src: 'audio/song2.mp3',
-                albumArt: 'https://via.placeholder.com/300x300?text=Song+Two'
-            },
-            {
-                title: 'Apsara Aali - Natarang',
-                src: 'audio/Apsara Aali Full Song  Natarang  Sonalee Kulkarni, Ajay Atul  Marathi Songs.mp3',
-                albumArt: 'https://via.placeholder.com/300x300?text=Apsara+Aali'
-            }
-        ];
-    
-        let songIndex = 0;
-    
-        // Load song function
-        function loadSong(index) {
-            audio.src = songs[index].src;
-            songTitle.innerText = songs[index].title;
-            albumArt.src = songs[index].albumArt;
-        }
-    
-        // Load the initial song
-        loadSong(songIndex);
-    
-        // Play/Pause functionality
-        playPauseBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play();
-                playPauseBtn.innerText = '❚❚';
-            } else {
-                audio.pause();
-                playPauseBtn.innerText = '►';
-            }
-        });
-    
-        // Next Song
-        nextBtn.addEventListener('click', () => {
-            songIndex = (songIndex + 1) % songs.length;
-            loadSong(songIndex);
-            audio.play();
-            playPauseBtn.innerText = '❚❚';
-        });
-    
-        // Previous Song
-        prevBtn.addEventListener('click', () => {
-            songIndex = (songIndex - 1 + songs.length) % songs.length;
-            loadSong(songIndex);
-            audio.play();
-            playPauseBtn.innerText = '❚❚';
-        });
-    
-        // Progress bar update
-        audio.addEventListener('timeupdate', () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.value = progress;
-        });
-    
-        // Scrub functionality
-        progressBar.addEventListener('input', () => {
-            audio.currentTime = (progressBar.value / 100) * audio.duration;
-        });
-    
-        // Register service worker for offline caching
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered'))
-            .catch((error) => console.log('Service Worker Registration Failed:', error));
-        }
-    </script>
-    
-</body>
-</html> -->
-
-
-<!-- ============= -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -251,13 +34,9 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Album Art */
+        /* Hide Album Art */
         #album-art {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
+            display: none; /* Hide the album art */
         }
 
         /* Song Title */
@@ -265,6 +44,33 @@
             font-size: 20px;
             margin: 15px 0;
             font-weight: bold;
+        }
+
+        /* Equalizer */
+        .equalizer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            height: 40px;
+            margin: 20px 0;
+        }
+
+        .bar {
+            width: 5px;
+            height: 100%;
+            background: #00D4FF;
+            margin: 0 1px;
+            animation: equalizer-animation 0.5s infinite alternate;
+        }
+
+        /* Animation for equalizer bars */
+        @keyframes equalizer-animation {
+            0% {
+                height: 20px;
+            }
+            100% {
+                height: 40px;
+            }
         }
 
         /* Controls */
@@ -349,6 +155,16 @@
         <img id="album-art" src="https://via.placeholder.com/300x300" alt="Album Art">
         <h2 id="song-title">Select a Song</h2>
         <audio id="audio" src=""></audio>
+
+        <!-- Equalizer -->
+        <div class="equalizer">
+            <div class="bar" style="animation-delay: 0s;"></div>
+            <div class="bar" style="animation-delay: 0.1s;"></div>
+            <div class="bar" style="animation-delay: 0.2s;"></div>
+            <div class="bar" style="animation-delay: 0.3s;"></div>
+            <div class="bar" style="animation-delay: 0.4s;"></div>
+        </div>
+        
         <input type="range" id="progress-bar" min="0" max="100" value="0">
         
         <div class="controls">
@@ -363,6 +179,23 @@
     </div>
 
     <script>
+        // Initialize IndexedDB
+        const dbName = 'musicPlayerDB';
+        const dbVersion = 1;
+        let db;
+
+        const request = indexedDB.open(dbName, dbVersion);
+        
+        request.onsuccess = function(event) {
+            db = event.target.result;
+            loadStoredSongs(); // Load songs from IndexedDB
+        };
+
+        request.onupgradeneeded = function(event) {
+            db = event.target.result;
+            db.createObjectStore('songs', { keyPath: 'id' });
+        };
+
         // JavaScript functionality for the music player
         const audio = document.getElementById('audio');
         const playPauseBtn = document.getElementById('play-pause');
@@ -374,31 +207,34 @@
         const addAudioBtn = document.getElementById('add-audio');
         const audioFileInput = document.getElementById('audio-file');
 
-        // Songs array
-        let songs = [
-            {
-                title: 'Song One',
-                src: 'audio/song1.mp3',
-                albumArt: 'https://via.placeholder.com/300x300?text=Song+One'
-            },
-            {
-                title: 'Song Two',
-                src: 'audio/song2.mp3',
-                albumArt: 'https://via.placeholder.com/300x300?text=Song+Two'
-            }
-        ];
-
+        let songs = [];
         let songIndex = 0;
 
         // Load song function
         function loadSong(index) {
             audio.src = songs[index].src;
             songTitle.innerText = songs[index].title;
-            albumArt.src = songs[index].albumArt;
+            albumArt.src = songs[index].albumArt || 'https://via.placeholder.com/300x300?text=Album+Art';
         }
 
         // Load the initial song
-        loadSong(songIndex);
+        function loadInitialSong() {
+            if (songs.length > 0) {
+                loadSong(songIndex);
+            }
+        }
+
+        // Load songs from IndexedDB
+        function loadStoredSongs() {
+            const transaction = db.transaction(['songs'], 'readonly');
+            const store = transaction.objectStore('songs');
+            const request = store.getAll();
+
+            request.onsuccess = function(event) {
+                songs = event.target.result;
+                loadInitialSong();
+            };
+        }
 
         // Play/Pause functionality
         playPauseBtn.addEventListener('click', () => {
@@ -450,27 +286,27 @@
                 const url = URL.createObjectURL(file);
                 const songName = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
 
-                // Add new song to the playlist
-                songs.push({
+                // Create song object
+                const newSong = {
+                    id: Date.now(),
                     title: songName,
                     src: url,
                     albumArt: 'https://via.placeholder.com/300x300?text=' + encodeURIComponent(songName)
-                });
+                };
 
-                // Auto-load and play the new song
+                // Store in IndexedDB
+                const transaction = db.transaction(['songs'], 'readwrite');
+                const store = transaction.objectStore('songs');
+                store.add(newSong);
+
+                // Add new song to the playlist and load it
+                songs.push(newSong);
                 songIndex = songs.length - 1;
                 loadSong(songIndex);
                 audio.play();
                 playPauseBtn.innerText = '❚❚';
             }
         });
-
-        // Register service worker for offline caching
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log('Service Worker Registered'))
-            .catch((error) => console.log('Service Worker Registration Failed:', error));
-        }
     </script>
 </body>
 </html>
