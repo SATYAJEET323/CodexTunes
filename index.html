@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Offline Music Player</title>
+    <title>CodexTune</title>
     <style>
         /* Basic Reset */
         * {
@@ -20,6 +20,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #1e3a5f, #1c1c1c);
             color: #fff;
+            flex-direction: column;
         }
 
         /* Player Container */
@@ -34,9 +35,30 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Hide Album Art */
-        #album-art {
-            display: none; /* Hide the album art */
+        /* Title */
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            animation: fadeIn 2s ease-in-out infinite alternate;
+        }
+
+        /* Animated Subtitle */
+        .subtitle {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #00D4FF;
+            text-shadow: 0 0 5px #00D4FF, 0 0 10px #00D4FF;
+            animation: glow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px #00D4FF, 0 0 10px #00D4FF; }
+            100% { text-shadow: 0 0 20px #00D4FF, 0 0 30px #00D4FF; }
         }
 
         /* Song Title */
@@ -44,33 +66,6 @@
             font-size: 20px;
             margin: 15px 0;
             font-weight: bold;
-        }
-
-        /* Equalizer */
-        .equalizer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            height: 40px;
-            margin: 20px 0;
-        }
-
-        .bar {
-            width: 5px;
-            height: 100%;
-            background: #00D4FF;
-            margin: 0 1px;
-            animation: equalizer-animation 0.5s infinite alternate;
-        }
-
-        /* Animation for equalizer bars */
-        @keyframes equalizer-animation {
-            0% {
-                height: 20px;
-            }
-            100% {
-                height: 40px;
-            }
         }
 
         /* Controls */
@@ -148,23 +143,101 @@
         #audio-file {
             display: none;
         }
+
+        /* Song List */
+        #song-list {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .song-item {
+            padding: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .song-item:last-child {
+            border-bottom: none; /* Remove border from last item */
+        }
+
+        .song-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .delete-btn {
+            background: #ff4d4d;
+            border: none;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .delete-btn:hover {
+            background: #ff1a1a;
+        }
+
+        /* Custom Scrollbar */
+        #song-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #song-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        #song-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        #song-list::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            animation: slideIn 1s ease-in-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .footer a {
+            color: #00D4FF;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #1e90ff;
+        }
+
     </style>
 </head>
 <body>
     <div class="player">
-        <img id="album-art" src="https://via.placeholder.com/300x300" alt="Album Art">
+        <h1>CodexTune</h1>
+        <div class="subtitle">Tune By XCoder</div>
         <h2 id="song-title">Select a Song</h2>
         <audio id="audio" src=""></audio>
-
-        <!-- Equalizer -->
-        <div class="equalizer">
-            <div class="bar" style="animation-delay: 0s;"></div>
-            <div class="bar" style="animation-delay: 0.1s;"></div>
-            <div class="bar" style="animation-delay: 0.2s;"></div>
-            <div class="bar" style="animation-delay: 0.3s;"></div>
-            <div class="bar" style="animation-delay: 0.4s;"></div>
-        </div>
-        
         <input type="range" id="progress-bar" min="0" max="100" value="0">
         
         <div class="controls">
@@ -176,6 +249,17 @@
         <!-- Add Audio Button -->
         <button id="add-audio">Add Audio</button>
         <input type="file" id="audio-file" accept="audio/*">
+
+        <!-- List of Songs -->
+        <div id="song-list"></div>
+
+        <!-- Footer with Links -->
+        <div class="footer">
+            <a href="https://satyajeet323.github.io/XCoder/" target="_blank">XCoder</a> |
+            <a href="https://www.linkedin.com/in/satyajeet-desai323" target="_blank">LinkedIn</a> |
+            <a href="https://github.com/SATYAJEET323" target="_blank">GitHub</a> |
+            <a href="mailto:sattudesai007@gmail.com">Email</a>
+        </div>
     </div>
 
     <script>
@@ -202,27 +286,13 @@
         const prevBtn = document.getElementById('prev');
         const nextBtn = document.getElementById('next');
         const progressBar = document.getElementById('progress-bar');
-        const songTitle = document.getElementById('song-title');
-        const albumArt = document.getElementById('album-art');
         const addAudioBtn = document.getElementById('add-audio');
         const audioFileInput = document.getElementById('audio-file');
+        const songTitle = document.getElementById('song-title');
+        const songList = document.getElementById('song-list');
 
         let songs = [];
         let songIndex = 0;
-
-        // Load song function
-        function loadSong(index) {
-            audio.src = songs[index].src;
-            songTitle.innerText = songs[index].title;
-            albumArt.src = songs[index].albumArt || 'https://via.placeholder.com/300x300?text=Album+Art';
-        }
-
-        // Load the initial song
-        function loadInitialSong() {
-            if (songs.length > 0) {
-                loadSong(songIndex);
-            }
-        }
 
         // Load songs from IndexedDB
         function loadStoredSongs() {
@@ -232,8 +302,26 @@
 
             request.onsuccess = function(event) {
                 songs = event.target.result;
-                loadInitialSong();
+                displaySongs();
             };
+        }
+
+        // Display songs in the list
+        function displaySongs() {
+            songList.innerHTML = '';
+            songs.forEach(song => {
+                const songItem = document.createElement('div');
+                songItem.className = 'song-item';
+                songItem.innerHTML = `
+                    ${song.title}
+                    <button class="delete-btn" data-id="${song.id}">Delete</button>
+                `;
+                songList.appendChild(songItem);
+            });
+            // Attach delete event listeners
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', deleteSong);
+            });
         }
 
         // Play/Pause functionality
@@ -247,15 +335,7 @@
             }
         });
 
-        // Next Song
-        nextBtn.addEventListener('click', () => {
-            songIndex = (songIndex + 1) % songs.length;
-            loadSong(songIndex);
-            audio.play();
-            playPauseBtn.innerText = '❚❚';
-        });
-
-        // Previous Song
+        // Previous song
         prevBtn.addEventListener('click', () => {
             songIndex = (songIndex - 1 + songs.length) % songs.length;
             loadSong(songIndex);
@@ -263,15 +343,31 @@
             playPauseBtn.innerText = '❚❚';
         });
 
-        // Progress bar update
+        // Next song
+        nextBtn.addEventListener('click', () => {
+            songIndex = (songIndex + 1) % songs.length;
+            loadSong(songIndex);
+            audio.play();
+            playPauseBtn.innerText = '❚❚';
+        });
+
+        // Load song and update title
+        function loadSong(index) {
+            const song = songs[index];
+            audio.src = song.src;
+            songTitle.innerText = song.title;
+        }
+
+        // Update Progress Bar
         audio.addEventListener('timeupdate', () => {
             const progress = (audio.currentTime / audio.duration) * 100;
             progressBar.value = progress;
         });
 
-        // Scrub functionality
+        // Seek functionality
         progressBar.addEventListener('input', () => {
-            audio.currentTime = (progressBar.value / 100) * audio.duration;
+            const seekTime = (progressBar.value / 100) * audio.duration;
+            audio.currentTime = seekTime;
         });
 
         // Add Audio Functionality
@@ -283,6 +379,12 @@
         audioFileInput.addEventListener('change', (event) => {
             const file = event.target.files[0];
             if (file) {
+                // Check for duplicates
+                if (songs.some(song => song.title === file.name.replace(/\.[^/.]+$/, ""))) {
+                    alert('This song has already been added.');
+                    return;
+                }
+
                 const url = URL.createObjectURL(file);
                 const songName = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
 
@@ -291,7 +393,6 @@
                     id: Date.now(),
                     title: songName,
                     src: url,
-                    albumArt: 'https://via.placeholder.com/300x300?text=' + encodeURIComponent(songName)
                 };
 
                 // Store in IndexedDB
@@ -305,8 +406,29 @@
                 loadSong(songIndex);
                 audio.play();
                 playPauseBtn.innerText = '❚❚';
+
+                // Display updated song list
+                displaySongs();
             }
         });
+
+        // Delete song functionality
+        function deleteSong(event) {
+            const songId = parseInt(event.target.getAttribute('data-id'));
+            const transaction = db.transaction(['songs'], 'readwrite');
+            const store = transaction.objectStore('songs');
+            store.delete(songId);
+
+            // Remove from the songs array
+            songs = songs.filter(song => song.id !== songId);
+            displaySongs();
+            if (songIndex >= songs.length) {
+                songIndex = songs.length - 1;
+                if (songIndex >= 0) loadSong(songIndex);
+            } else {
+                loadSong(songIndex);
+            }
+        }
     </script>
 </body>
 </html>
