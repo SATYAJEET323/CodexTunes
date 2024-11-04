@@ -23,7 +23,6 @@
             flex-direction: column;
         }
 
-        /* Player Container */
         .player {
             width: 360px;
             background: rgba(255, 255, 255, 0.1);
@@ -35,14 +34,12 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* Title */
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
             animation: fadeIn 2s ease-in-out infinite alternate;
         }
 
-        /* Animated Subtitle */
         .subtitle {
             font-size: 18px;
             margin-bottom: 15px;
@@ -51,24 +48,12 @@
             animation: glow 1s ease-in-out infinite alternate;
         }
 
-        @keyframes fadeIn {
-            0% { opacity: 0.5; }
-            100% { opacity: 1; }
-        }
-
-        @keyframes glow {
-            0% { text-shadow: 0 0 5px #00D4FF, 0 0 10px #00D4FF; }
-            100% { text-shadow: 0 0 20px #00D4FF, 0 0 30px #00D4FF; }
-        }
-
-        /* Song Title */
         #song-title {
             font-size: 20px;
             margin: 15px 0;
             font-weight: bold;
         }
 
-        /* Controls */
         .controls {
             display: flex;
             justify-content: space-around;
@@ -88,32 +73,6 @@
             transition: 0.3s ease;
         }
 
-        .controls button:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(1.1);
-        }
-
-        /* Progress Bar */
-        #progress-bar {
-            width: 100%;
-            margin: 20px 0;
-            appearance: none;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            outline: none;
-        }
-
-        #progress-bar::-webkit-slider-thumb {
-            appearance: none;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #00D4FF;
-            cursor: pointer;
-            box-shadow: 0px 0px 5px rgba(0, 212, 255, 0.5);
-        }
-
         #play-pause {
             background: #00D4FF;
             font-size: 24px;
@@ -122,29 +81,22 @@
             border-radius: 50%;
         }
 
-        /* Add Audio Button */
-        #add-audio {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #00D4FF;
+        #load-folder {
+            background: #ff7f50;
+            color: white;
             border: none;
-            color: #fff;
-            font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 15px;
             border-radius: 10px;
             cursor: pointer;
+            font-size: 16px;
             transition: 0.3s;
         }
 
-        #add-audio:hover {
-            background: #1e90ff;
+        #load-folder:hover {
+            background: #ff5722;
         }
 
-        /* Hide File Input */
-        #audio-file {
-            display: none;
-        }
-
-        /* Song List */
         #song-list {
             margin-top: 20px;
             text-align: left;
@@ -153,6 +105,21 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #00D4FF rgba(255, 255, 255, 0.1);
+        }
+
+        #song-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #song-list::-webkit-scrollbar-thumb {
+            background: #00D4FF;
+            border-radius: 4px;
         }
 
         .song-item {
@@ -163,73 +130,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .song-item:last-child {
-            border-bottom: none; /* Remove border from last item */
+            border-radius: 5px;
         }
 
         .song-item:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.2);
         }
-
-        .delete-btn {
-            background: #ff4d4d;
-            border: none;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .delete-btn:hover {
-            background: #ff1a1a;
-        }
-
-        /* Custom Scrollbar */
-        #song-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        #song-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-
-        #song-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 10px;
-        }
-
-        #song-list::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.8);
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 20px;
-            padding: 10px;
-            text-align: center;
-            animation: slideIn 1s ease-in-out;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .footer a {
-            color: #00D4FF;
-            text-decoration: none;
-            margin: 0 10px;
-            transition: color 0.3s;
-        }
-
-        .footer a:hover {
-            color: #1e90ff;
-        }
-
     </style>
 </head>
 <body>
@@ -238,7 +144,6 @@
         <div class="subtitle">Tune By XCoder</div>
         <h2 id="song-title">Select a Song</h2>
         <audio id="audio" src=""></audio>
-        <input type="range" id="progress-bar" min="0" max="100" value="0">
         
         <div class="controls">
             <button id="prev">&#9664;</button>
@@ -246,81 +151,67 @@
             <button id="next">&#9654;</button>
         </div>
 
-        <!-- Add Audio Button -->
-        <button id="add-audio">Add Audio</button>
-        <input type="file" id="audio-file" accept="audio/*">
-
-        <!-- List of Songs -->
+        <button id="load-folder">Load Music Folder</button>
         <div id="song-list"></div>
-
-        <!-- Footer with Links -->
-        <div class="footer">
-            <a href="https://satyajeet323.github.io/XCoder/" target="_blank">XCoder</a> |
-            <a href="https://www.linkedin.com/in/satyajeet-desai323" target="_blank">LinkedIn</a> |
-            <a href="https://github.com/SATYAJEET323" target="_blank">GitHub</a>
-        </div>
     </div>
 
     <script>
-        // Initialize IndexedDB
-        const dbName = 'musicPlayerDB';
-        const dbVersion = 1;
-        let db;
-
-        const request = indexedDB.open(dbName, dbVersion);
-        
-        request.onsuccess = function(event) {
-            db = event.target.result;
-            loadStoredSongs(); // Load songs from IndexedDB
-        };
-
-        request.onupgradeneeded = function(event) {
-            db = event.target.result;
-            db.createObjectStore('songs', { keyPath: 'id' });
-        };
-
-        // JavaScript functionality for the music player
         const audio = document.getElementById('audio');
         const playPauseBtn = document.getElementById('play-pause');
         const prevBtn = document.getElementById('prev');
         const nextBtn = document.getElementById('next');
-        const progressBar = document.getElementById('progress-bar');
-        const addAudioBtn = document.getElementById('add-audio');
-        const audioFileInput = document.getElementById('audio-file');
         const songTitle = document.getElementById('song-title');
         const songList = document.getElementById('song-list');
-
         let songs = [];
         let songIndex = 0;
 
-        // Load songs from IndexedDB
-        function loadStoredSongs() {
-            const transaction = db.transaction(['songs'], 'readonly');
-            const store = transaction.objectStore('songs');
-            const request = store.getAll();
+        // Load music folder
+        document.getElementById('load-folder').addEventListener('click', async () => {
+            const directoryHandle = await window.showDirectoryPicker();
+            songs = [];
 
-            request.onsuccess = function(event) {
-                songs = event.target.result;
+            for await (const [name, handle] of directoryHandle.entries()) {
+                if (handle.kind === 'file' && name.endsWith('.mp3')) {
+                    const file = await handle.getFile();
+                    songs.push({
+                        title: file.name.replace(/\.[^/.]+$/, ""),
+                        src: URL.createObjectURL(file),
+                        fileHandle: handle
+                    });
+                }
+            }
+
+            if (songs.length > 0) {
+                songIndex = 0;
+                loadSong(songIndex);
                 displaySongs();
-            };
-        }
+            } else {
+                alert("No audio files found in this folder.");
+            }
+        });
 
         // Display songs in the list
         function displaySongs() {
             songList.innerHTML = '';
-            songs.forEach(song => {
+            songs.forEach((song, index) => {
                 const songItem = document.createElement('div');
                 songItem.className = 'song-item';
-                songItem.innerHTML = `
-                    ${song.title}
-                    <button class="delete-btn" data-id="${song.id}">Delete</button>
-                `;
+                songItem.innerText = song.title;
+                songItem.addEventListener('click', () => {
+                    songIndex = index;
+                    loadSong(songIndex);
+                    audio.play();
+                    playPauseBtn.innerText = '❚❚';
+                });
                 songList.appendChild(songItem);
             });
-            // Attach delete event listeners
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', deleteSong);
-            });
+        }
+
+        // Load song and update title
+        function loadSong(index) {
+            const song = songs[index];
+            audio.src = song.src;
+            songTitle.innerText = song.title;
         }
 
         // Play/Pause functionality
@@ -349,85 +240,6 @@
             audio.play();
             playPauseBtn.innerText = '❚❚';
         });
-
-        // Load song and update title
-        function loadSong(index) {
-            const song = songs[index];
-            audio.src = song.src;
-            songTitle.innerText = song.title;
-        }
-
-        // Update Progress Bar
-        audio.addEventListener('timeupdate', () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.value = progress;
-        });
-
-        // Seek functionality
-        progressBar.addEventListener('input', () => {
-            const seekTime = (progressBar.value / 100) * audio.duration;
-            audio.currentTime = seekTime;
-        });
-
-        // Add Audio Functionality
-        addAudioBtn.addEventListener('click', () => {
-            audioFileInput.click(); // Trigger file input click
-        });
-
-        // Handle File Selection
-        audioFileInput.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                // Check for duplicates
-                if (songs.some(song => song.title === file.name.replace(/\.[^/.]+$/, ""))) {
-                    alert('This song has already been added.');
-                    return;
-                }
-
-                const url = URL.createObjectURL(file);
-                const songName = file.name.replace(/\.[^/.]+$/, ""); // Remove file extension
-
-                // Create song object
-                const newSong = {
-                    id: Date.now(),
-                    title: songName,
-                    src: url,
-                };
-
-                // Store in IndexedDB
-                const transaction = db.transaction(['songs'], 'readwrite');
-                const store = transaction.objectStore('songs');
-                store.add(newSong);
-
-                // Add new song to the playlist and load it
-                songs.push(newSong);
-                songIndex = songs.length - 1;
-                loadSong(songIndex);
-                audio.play();
-                playPauseBtn.innerText = '❚❚';
-
-                // Display updated song list
-                displaySongs();
-            }
-        });
-
-        // Delete song functionality
-        function deleteSong(event) {
-            const songId = parseInt(event.target.getAttribute('data-id'));
-            const transaction = db.transaction(['songs'], 'readwrite');
-            const store = transaction.objectStore('songs');
-            store.delete(songId);
-
-            // Remove from the songs array
-            songs = songs.filter(song => song.id !== songId);
-            displaySongs();
-            if (songIndex >= songs.length) {
-                songIndex = songs.length - 1;
-                if (songIndex >= 0) loadSong(songIndex);
-            } else {
-                loadSong(songIndex);
-            }
-        }
     </script>
 </body>
 </html>
